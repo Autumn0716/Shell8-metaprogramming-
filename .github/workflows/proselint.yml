@@ -1,1 +1,24 @@
-
+name: proselint check   #工作流级别的name
+on: [pull_request] #仅在建立PR时触发.
+jobs:
+  lint:    #jobs级别的name 是任务的id名字.是任务的显示名称
+    runs-on: ubuntu-latest #建立虚拟机,最新的ubuntu版本.
+    steps:
+    # 1. 拉取代码
+    - name: Lint Check #step级别的代码,方便定位问题.,这里只是自己的工作流.直译命名.
+      uses: actions/checkout@v4 #等同于git clone
+    # 2. 设置python环境
+    - name: Set up Python
+      uses: actions/setup-python@v5 #配置python环境
+      with:
+        python-version: "3.10"
+    #3.安装依赖
+    - name: Install  Proselint via pip
+      run: pip install proselint 
+      #验证安装
+    - name: Check Proselint Version
+      run: proselint --version
+    #4.调用
+    - name: Run Proselint
+      run: |
+        proselint *.md
